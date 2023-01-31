@@ -12,13 +12,17 @@ const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pri
 
     // imgs
     let images;
-    if(sources[i].isDataSrc === "true") {
+    if(sources[i].isDataSrc) {
         images = await page.$$eval(sources[i].imgElement, el => el.map(x => x.getAttribute("data-src")));
     } else {
         images = await page.$$eval(sources[i].imgElement, el => el.map(x => x.getAttribute("src")));
     }
-    for(let i = 0; i < images.length; i++) {
-        imgsArray.push(images[i]);
+    for(let j = 0; j < images.length; j++) {
+        if(!sources[i].wholeUrl){
+            imgsArray.push(sources[i].url + images[j]);
+        } else {
+            imgsArray.push(images[j]);
+        }
     }
 
     // name

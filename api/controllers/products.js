@@ -1,9 +1,9 @@
 import puppeteer from 'puppeteer';
-import sources from '../utils/sources.json' assert {type: 'json'};
-import {Result} from "../utils/result.js";
 
 // util imports
 import {scrapePages} from "../utils/scrape.js";
+import {Result} from "../utils/result.js";
+import sources from '../utils/sources.json' assert {type: 'json'};
 
 const Scrape = async (req, res) => {
 // scraping results
@@ -28,7 +28,7 @@ const Scrape = async (req, res) => {
             '--no-first-run',
             '--no-zygote',
             '--disable-gpu'
-        ],
+        ]
     });
 
     const page = await browser.newPage();
@@ -45,11 +45,11 @@ const Scrape = async (req, res) => {
     });
 
     for(let i = 0; i < sources.length; i++){
-        if(sources[i].countByPage === 'true') {
-            let newLink = sources[i].searchUrl.replace('$argument$', 'lupazis');
+        if(sources[i].countByPage) {
+            let newLink = sources[i].searchUrl.replace('$argument$', 'nyx');
             link = newLink.replace('$pageNumber$', '0');
         } else {
-            let newLink = sources[i].searchUrl.replace('$argument$', 'lupazis');
+            let newLink = sources[i].searchUrl.replace('$argument$', 'nyx');
             link = newLink.replace('$productOffset$', '0');
         }
 
@@ -59,9 +59,6 @@ const Scrape = async (req, res) => {
     for(let i = 0; i < links.length; i++){
         results.push(new Result(links[i], names[i], imgs[i], prices[i]));
     }
-
-    const t1 = performance.now();
-    console.log(t1);
 
     await browser.close();
     res.send(results)
