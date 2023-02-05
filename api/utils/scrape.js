@@ -1,6 +1,18 @@
 import sources from "../utils/sources.json" assert {type: 'json'};
 
 const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pricesArray) => {
+    await page.setRequestInterception(true);
+    await page.setUserAgent( 'UA-TEST' );
+
+    page.on('request', (req) => {
+        if(req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image' || req.resourceType() === 'media' || req.resourceType() === 'script' || req.resourceType() === 'websocket' || req.resourceType() === 'xhr' || req.resourceType() === 'manifest' || req.resourceType() === 'fetch'){
+            req.abort();
+        }
+        else {
+            req.continue();
+        }
+    });
+
     await page.goto(link, { waitUntil: 'domcontentloaded' });
 
     const resultBoxes = await page.$x(sources[i].resultBoxes);
