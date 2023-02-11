@@ -13,7 +13,7 @@
     "imgSource": "data-src",
     "nameElement": ".product-tile__product-name-link__description-overflow",
     "innerText": "innerText",
-    "priceElement": ".product-tile__price--original"
+    "priceElement": ".product-tile__price-wrapper"
   },
   {
     "name": "Eurokos LT",
@@ -54,13 +54,13 @@
     "wholeUrl": true,
     "countByPage": true,
     "resultBoxes": "//div[@class='product-wrapper']",
-    "aTag": "a",
+    "aTag": ".product",
     "hrefAttr": "href",
     "imgElement": "img.product-image-photo",
     "isDataSrc": true,
     "imgSource": "data-src",
     "nameElement": ".product-item-name",
     "innerText": "innerText",
-    "priceElement": ".price-wrapper"
+    "priceElement": ".price-container"
   }
 ]

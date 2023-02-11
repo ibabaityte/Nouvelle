@@ -6,11 +6,12 @@ import sources from '../utils/sources.json' assert {type: 'json'};
 import {scrapePages} from "../utils/scrape.js";
 
 const Scrape = async (req, res) => {
+
     // scraping results
-    let links = [];
-    let imgs = [];
-    let names = [];
-    let prices = [];
+    let links = [[], [], [], []];
+    let imgs = [[], [], [], []];
+    let names = [[], [], [], []];
+    let prices = [[], [], [], []];
 
     // correct link for generating
     let link;
@@ -19,19 +20,10 @@ const Scrape = async (req, res) => {
     let results = [];
 
     const cluster = await Cluster.launch({
-        concurrency: Cluster.CONCURRENCY_CONTEXT,
+        concurrency: Cluster.CONCURRENCY_BROWSER,
         maxConcurrency: 10,
         puppeteerOptions: {
-            headless: true,
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--disable-gpu'
-            ]
+            headless: true
         }
     });
 
@@ -39,14 +31,14 @@ const Scrape = async (req, res) => {
 
     for(let i = 0; i < sources.length; i++){
         if(sources[i].countByPage) {
-            let newLink = sources[i].searchUrl.replace('$argument$', 'loreal');
+            let newLink = sources[i].searchUrl.replace('$argument$', 'kremas');
             link = newLink.replace('$pageNumber$', '0');
         } else {
-            let newLink = sources[i].searchUrl.replace('$argument$', 'loreal');
+            let newLink = sources[i].searchUrl.replace('$argument$', 'kremas');
             link = newLink.replace('$productOffset$', '0');
         }
 
-        // await scrapePages(page, i, link, links, imgs, names, prices);
+        // await scrapePages(page, i, link, links[i], imgs[i], names[i], prices[i]);
         await cluster.queue({i, link, links, imgs, names, prices});
     }
 
@@ -54,7 +46,9 @@ const Scrape = async (req, res) => {
     await cluster.close();
 
     for(let i = 0; i < links.length; i++){
-        results.push(new Result(links[i], names[i], imgs[i], prices[i]));
+        for(let j = 0; j < links[i].length; j++){
+            results.push(new Result(links[i][j], names[i][j], imgs[i][j], prices[i][j]));
+        }
     }
 
     res.send(results)
