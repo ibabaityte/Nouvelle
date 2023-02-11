@@ -19,6 +19,8 @@ const Scrape = async (req, res) => {
     // generated results
     let results = [];
 
+    process.setMaxListeners(Infinity);
+
     const cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_BROWSER,
         maxConcurrency: 10,
