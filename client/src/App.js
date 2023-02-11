@@ -1,22 +1,19 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {useState} from "react";
 
 // component imports
 import Search from "./components/Search";
+import ProductList from "./components/ProductList";
 
 const App = () => {
 
     const [results, setResults] = useState(null);
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/scrape").then(result => {
-            setResults(result);
-        });
-    }, [])
-
     return (
         <div className="App">
             <Search
+                setResults={setResults}
+            />
+            <ProductList
                 results={results}
             />
         </div>

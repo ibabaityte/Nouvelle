@@ -1,24 +1,20 @@
+import {useState} from "react";
+
+// utils imports
+import {fetchProducts} from "../utils/searchUtils";
+
 const Search = (props) => {
 
     const {
-        results
+        setResults
     } = props;
+
+    const [query, setQuery] = useState("");
 
     return (
         <div>
-            {
-                results === null ? null :
-                    results.data.map((result, key) => {
-                        return (
-                            <div key={key}>
-                                <h2>{result.name}</h2>
-                                <a href={result.url}>Click here to buy product</a>
-                                <img src={result.img} alt="product image"/>
-                                <h3>{result.price}</h3>
-                            </div>
-                        );
-                    })
-            }
+            <input type="text" onChange={(e) => setQuery(e.target.value)}/>
+            <button onClick={() => fetchProducts(setResults, query)}>Search</button>
         </div>
     );
 }

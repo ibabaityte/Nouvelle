@@ -7,6 +7,8 @@ import {scrapePages} from "../utils/scrape.js";
 
 const Scrape = async (req, res) => {
 
+    let query = req.query.query;
+
     // scraping results
     let links = [[], [], [], []];
     let imgs = [[], [], [], []];
@@ -33,10 +35,10 @@ const Scrape = async (req, res) => {
 
     for(let i = 0; i < sources.length; i++){
         if(sources[i].countByPage) {
-            let newLink = sources[i].searchUrl.replace('$argument$', 'kremas');
+            let newLink = sources[i].searchUrl.replace('$argument$', query);
             link = newLink.replace('$pageNumber$', '0');
         } else {
-            let newLink = sources[i].searchUrl.replace('$argument$', 'kremas');
+            let newLink = sources[i].searchUrl.replace('$argument$', query);
             link = newLink.replace('$productOffset$', '0');
         }
 
