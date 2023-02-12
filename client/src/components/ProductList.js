@@ -7,15 +7,16 @@ const ProductList = (props) => {
     return (
         <div>
             {
-                results === null || results === undefined ?
+                results.length === 0 ?
                     <div>Waiting...</div>
                     :
-                    results.data.map((result, key) => {
+                    results.map((result, key) => {
                         return (
                             <div key={key}>
                                 <h2>{result.name}</h2>
-                                <a href={result.url} target="_blank">Click here to buy product</a>
-                                <img src={result.img} alt="product image"/>
+                                <a href={result.url} target="_blank" rel="noreferrer" >Click here to buy product</a>
+                                <img src={result.img} alt={"product image"}/>
+                                <h3>{result.img}</h3>
                                 <h3>{result.price}</h3>
                             </div>
                         );

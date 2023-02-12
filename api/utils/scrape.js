@@ -1,17 +1,17 @@
-import sources from "../utils/sources.json" assert {type: 'json'};
+import sources from "../utils/sourcesCopy.json" assert {type: 'json'};
 
 const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pricesArray) => {
     await page.setUserAgent( 'UA-TEST' );
     await page.setRequestInterception(true);
     page.on('request', (request) => {
         if (['stylesheet', 'font', 'image'].indexOf(request.resourceType()) !== -1) {
-            request.abort();
+            return request.abort();
         } else {
             request.continue();
         }
     });
 
-    await page.goto(link);
+    await page.goto(link, {waitUntil: "domcontentloaded"});
 
     const resultBoxes = await page.$x(sources[i].resultBoxes);
 

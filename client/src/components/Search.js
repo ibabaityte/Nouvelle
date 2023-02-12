@@ -6,7 +6,14 @@ import {fetchProducts} from "../utils/searchUtils";
 const Search = (props) => {
 
     const {
-        setResults
+        results,
+        setResults,
+        currentPage,
+        setCurrentPage,
+        kristianaCurrentPage,
+        setKristianaCurrentPage,
+        productOffset,
+        setProductOffset
     } = props;
 
     const [query, setQuery] = useState("");
@@ -14,7 +21,7 @@ const Search = (props) => {
     return (
         <div>
             <input type="text" onChange={(e) => setQuery(e.target.value)}/>
-            <button onClick={() => fetchProducts(setResults, query)}>Search</button>
+            <button onClick={() => fetchProducts(results, setResults, query, currentPage, setCurrentPage, kristianaCurrentPage, setKristianaCurrentPage, productOffset, setProductOffset)}>Search</button>
         </div>
     );
 }

@@ -2,12 +2,15 @@ import {Cluster} from "puppeteer-cluster"
 
 // util imports
 import {Result} from "../utils/result.js";
-import sources from '../utils/sources.json' assert {type: 'json'};
+import sources from '../utils/sourcesCopy.json' assert {type: 'json'};
 import {scrapePages} from "../utils/scrape.js";
 
 const Scrape = async (req, res) => {
 
     let query = req.query.query;
+    let page = req.query.currentPage;
+    let kristianaPage = req.query.kristianaCurrentPage;
+    let offset = req.query.productOffset;
 
     // scraping results
     let links = [[], [], [], []];
@@ -24,10 +27,16 @@ const Scrape = async (req, res) => {
     process.setMaxListeners(Infinity);
 
     const cluster = await Cluster.launch({
-        concurrency: Cluster.CONCURRENCY_BROWSER,
-        maxConcurrency: 10,
+        concurrency: Cluster.CONCURRENCY_CONTEXT,
+        maxConcurrency: 4,
         puppeteerOptions: {
-            headless: true
+            headless: true,
+            args: [
+                '--no-sandbox',
+                '--disable-notifications',
+                '--disable-extensions',
+                '--disable-gpu',
+            ]
         }
     });
 
@@ -36,13 +45,16 @@ const Scrape = async (req, res) => {
     for(let i = 0; i < sources.length; i++){
         if(sources[i].countByPage) {
             let newLink = sources[i].searchUrl.replace('$argument$', query);
-            link = newLink.replace('$pageNumber$', '0');
+            if(sources[i].name === "Kristiana LT") {
+                link = newLink.replace('$pageNumber$', kristianaPage);
+            } else {
+                link = newLink.replace('$pageNumber$', page);
+            }
         } else {
             let newLink = sources[i].searchUrl.replace('$argument$', query);
-            link = newLink.replace('$productOffset$', '0');
+            link = newLink.replace('$productOffset$', offset);
         }
 
-        // await scrapePages(page, i, link, links[i], imgs[i], names[i], prices[i]);
         await cluster.queue({i, link, links, imgs, names, prices});
     }
 
