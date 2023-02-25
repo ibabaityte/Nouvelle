@@ -16,12 +16,13 @@ const Search = (props) => {
         setProductOffset
     } = props;
 
+    const [prevQuery, setPrevQuery] = useState("");
     const [query, setQuery] = useState("");
 
     return (
         <div>
             <input type="text" onChange={(e) => setQuery(e.target.value)}/>
-            <button onClick={() => fetchProducts(results, setResults, query, currentPage, setCurrentPage, kristianaCurrentPage, setKristianaCurrentPage, productOffset, setProductOffset)}>Search</button>
+            <button onClick={() => fetchProducts(results, setResults, query, prevQuery, setPrevQuery, currentPage, setCurrentPage, kristianaCurrentPage, setKristianaCurrentPage, productOffset, setProductOffset)}>Search</button>
         </div>
     );
 }

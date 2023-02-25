@@ -2,7 +2,7 @@ import {Cluster} from "puppeteer-cluster"
 
 // util imports
 import {Result} from "../utils/result.js";
-import sources from '../utils/sourcesCopy.json' assert {type: 'json'};
+import sources from '../utils/sources.json' assert {type: 'json'};
 import {scrapePages} from "../utils/scrape.js";
 
 const Scrape = async (req, res) => {
@@ -28,7 +28,8 @@ const Scrape = async (req, res) => {
 
     const cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_CONTEXT,
-        maxConcurrency: 4,
+        maxConcurrency: 10,
+        timeout: 10000,
         puppeteerOptions: {
             headless: true,
             args: [

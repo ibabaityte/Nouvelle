@@ -1,4 +1,4 @@
-import sources from "../utils/sourcesCopy.json" assert {type: 'json'};
+import sources from "../utils/sources.json" assert {type: 'json'};
 
 const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pricesArray) => {
     await page.setUserAgent( 'UA-TEST' );
@@ -45,6 +45,7 @@ const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pri
     const priceHandles = await Promise.all(resultBoxes.map(res => res.$(sources[i].priceElement)));
     const priceJsHandles = await Promise.all(priceHandles.map(res => res.getProperty(sources[i].innerText)));
     await Promise.all(priceJsHandles.map(async res => pricesArray[i].push(await res.jsonValue())));
+
 }
 
 export {

@@ -11,13 +11,6 @@ const App = () => {
     const [kristianaCurrentPage, setKristianaCurrentPage] = useState(1);
     const [productOffset, setProductOffset] = useState(0);
 
-    // console.log(results);
-    if(results.length !== 0) {
-        for(let i = 0; i < results.length; i++){
-            console.log(results[i]);
-        }
-    }
-
     return (
         <div className="App">
             <Search

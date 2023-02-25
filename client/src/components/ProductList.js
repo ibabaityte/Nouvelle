@@ -14,7 +14,7 @@ const ProductList = (props) => {
                         return (
                             <div key={key}>
                                 <h2>{result.name}</h2>
-                                <a href={result.url} target="_blank" rel="noreferrer" >Click here to buy product</a>
+                                <a href={result.url} target="_blank" rel="noreferrer" >{result.url}</a>
                                 <img src={result.img} alt={"product image"}/>
                                 <h3>{result.img}</h3>
                                 <h3>{result.price}</h3>

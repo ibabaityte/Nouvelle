@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetchProducts = (results, setResults, query, currentPage, setCurrentPage, kristianaCurrentPage, setKristianaCurrentPage, productOffset, setProductOffset) => {
+const fetchProducts = (results, setResults, query, prevQuery, setPrevQuery, currentPage, setCurrentPage, kristianaCurrentPage, setKristianaCurrentPage, productOffset, setProductOffset) => {
     let page = currentPage;
     let kristianaPage = kristianaCurrentPage;
     let offset = productOffset;
@@ -12,8 +12,15 @@ const fetchProducts = (results, setResults, query, currentPage, setCurrentPage, 
             'productOffset': productOffset
         }
     }).then(result => {
-        let resultArray = [...results, ...result.data];
-        setResults(resultArray);
+        if(query === prevQuery) {
+            let resultArray = [...results, ...result.data];
+            setResults(resultArray);
+        } else {
+            setCurrentPage(0);
+            setKristianaCurrentPage(1);
+            setProductOffset(0);
+            setResults(result.data);
+        }
     });
 
     page++;
@@ -22,6 +29,8 @@ const fetchProducts = (results, setResults, query, currentPage, setCurrentPage, 
     setKristianaCurrentPage(kristianaPage);
     offset += 40;
     setProductOffset(offset);
+
+    setPrevQuery(query);
 }
 
 export {
