@@ -1,6 +1,6 @@
 import sources from "../utils/sources.json" assert {type: 'json'};
 
-const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pricesArray) => {
+const scrapePages = async (page, i, shop, link, linksArray, imgsArray, namesArray, pricesArray) => {
     await page.setUserAgent( 'UA-TEST' );
     await page.setRequestInterception(true);
     page.on('request', (request) => {
@@ -12,6 +12,10 @@ const scrapePages = async (page, i, link, linksArray, imgsArray, namesArray, pri
     });
 
     await page.goto(link, {waitUntil: "domcontentloaded"});
+
+    if(sources[i].name === "Douglas LT") {
+        page.waitForTimeout(1000);
+    }
 
     const resultBoxes = await page.$x(sources[i].resultBoxes);
 

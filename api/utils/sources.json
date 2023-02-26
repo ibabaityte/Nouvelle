@@ -37,6 +37,7 @@
     "searchUrl": "https://www.douglas.lt/?sn.g.offset=$productOffset$&sn.q=$argument$",
     "wholeUrl": true,
     "countByPage": false,
+    "waitForElement": "#searchNode",
     "resultBoxes": "//div[@class='product_element']",
     "aTag": "a",
     "hrefAttr": "href",
