@@ -1,11 +1,13 @@
-import {useState} from "react";
-
 // utils imports
 import {fetchProducts} from "../utils/searchUtils";
 
 const Search = (props) => {
 
     const {
+        prevQuery,
+        setPrevQuery,
+        query,
+        setQuery,
         results,
         setResults,
         currentPage,
@@ -15,9 +17,6 @@ const Search = (props) => {
         productOffset,
         setProductOffset
     } = props;
-
-    const [prevQuery, setPrevQuery] = useState("");
-    const [query, setQuery] = useState("");
 
     return (
         <div>

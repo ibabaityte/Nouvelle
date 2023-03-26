@@ -5,7 +5,7 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
     let kristianaPage = kristianaCurrentPage;
     let offset = productOffset;
 
-    if(query !== prevQuery && page > 0) {
+    if (query !== prevQuery && page > 0) {
         page = 0;
         kristianaPage = 1;
         offset = 0;
@@ -23,8 +23,8 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
             'productOffset': offset
         }
     }).then(result => {
-        if(query === prevQuery) {
-            let resultArray = sortProducts([...results, ...result.data], query);
+        if (query === prevQuery) {
+            let resultArray = sortByRelevance(null, "relevance", null, [...results, ...result.data], query, null);
             setResults(resultArray);
 
             page++;
@@ -35,7 +35,7 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
             setCurrentPage(page);
             setProductOffset(offset);
         } else {
-            let resultArray = sortProducts(result.data, query);
+            let resultArray = sortByRelevance(null, "relevance", null, result.data, query, null);
             setResults(resultArray);
 
             page++;
@@ -51,9 +51,9 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
     });
 }
 
-const sortProducts = (array, query) => {
+const sortByRelevance = (e, param, setParam, array, query, setResults) => {
     let queryStringArray = query.split(" ");
-    return array.map(entry => {
+    let sorted = array.map(entry => {
         let points = 0;
         if (queryStringArray.some(substring => entry.name.toLowerCase().includes(substring))) {
             points += 2;
@@ -63,8 +63,30 @@ const sortProducts = (array, query) => {
         }
         return {...entry, points};
     }).sort((a, b) => b.points - a.points);
+
+    if (setResults) {
+        setParam(e.target.value);
+        setResults(sorted);
+    } else {
+        return sorted;
+    }
+}
+
+const sortByPrice = (e, setParam, array, setResults) => {
+    let sorted = array.sort((a, b) => a.price > b.price ? 1 : -1);
+    setParam(e.target.value);
+    setResults(sorted);
+}
+
+const sortAlphabetically = (e, setParam, array, setResults) => {
+    let sorted = array.sort((a, b) => a.name > b.name ? 1 : -1);
+    setParam(e.target.value);
+    setResults(sorted);
 }
 
 export {
-    fetchProducts
+    fetchProducts,
+    sortByRelevance,
+    sortByPrice,
+    sortAlphabetically
 }
