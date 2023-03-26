@@ -26,7 +26,7 @@ const initCluster = async () => {
                 '--no-sandbox',
                 '--disable-notifications',
                 '--disable-extensions',
-                '--disable-gpu',
+                '--disable-gpu'
             ]
         }
     });

@@ -24,7 +24,7 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
         }
     }).then(result => {
         if(query === prevQuery) {
-            let resultArray = [...results, ...result.data];
+            let resultArray = sortProducts([...results, ...result.data], query);
             setResults(resultArray);
 
             page++;
@@ -35,7 +35,8 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
             setCurrentPage(page);
             setProductOffset(offset);
         } else {
-            setResults(result.data);
+            let resultArray = sortProducts(result.data, query);
+            setResults(resultArray);
 
             page++;
             kristianaPage++;
@@ -48,6 +49,20 @@ const fetchProducts = async (results, setResults, query, prevQuery, setPrevQuery
 
         setPrevQuery(query);
     });
+}
+
+const sortProducts = (array, query) => {
+    let queryStringArray = query.split(" ");
+    return array.map(entry => {
+        let points = 0;
+        if (queryStringArray.some(substring => entry.name.toLowerCase().includes(substring))) {
+            points += 2;
+        }
+        if (queryStringArray.some(substring => entry.name.toLowerCase().includes(substring))) {
+            points += 1;
+        }
+        return {...entry, points};
+    }).sort((a, b) => b.points - a.points);
 }
 
 export {

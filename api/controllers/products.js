@@ -11,6 +11,9 @@ const Scrape = async (req, res) => {
     let kristianaPage = req.query.kristianaCurrentPage;
     let offset = req.query.productOffset;
 
+    // generated results
+    var results = [];
+
     if(!validateRequest(req)) {
         return res.status(404).send({
             message: "Something went wrong. Try again."
@@ -18,16 +21,14 @@ const Scrape = async (req, res) => {
     }
 
     if (myCache.has(query + page)) {
-        res.send(myCache.get(query + page))
+        results = myCache.get(query + page);
     } else {
+
         // scraping results
         var links = [[], [], [], []];
         var images = [[], [], [], []];
         var names = [[], [], [], []];
         var prices = [[], [], [], []];
-
-        // generated results
-        var results = [];
 
         const cluster = await initCluster();
 
@@ -51,12 +52,13 @@ const Scrape = async (req, res) => {
 
         myCache.set(query + page, results, 300000);
 
-        res
-            .status(validateResults(results) ? 200 : 404)
-            .send(validateResults(results) ? results : {
-                message: "No products found. Try again. "
-            })
     }
+
+    res
+        .status(validateResults(results) ? 200 : 404)
+        .send(validateResults(results) ? results : {
+            message: "No products found. Try again. "
+        })
 }
 
 export default {
