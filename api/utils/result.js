@@ -4,11 +4,13 @@ export class Result {
         url,
         name,
         img,
-        price
+        price,
+        reducedPrice
     ) {
         this.url = url;
         this.name = name;
         this.img = img;
-        this.price = price;
+        this.price = price === "0" ? reducedPrice : price;
+        this.reducedPrice = reducedPrice;
     }
 }

@@ -14,7 +14,8 @@
     "imgSource": "data-src",
     "nameElement": ".product-tile__product-name-link__description-overflow",
     "innerText": "innerText",
-    "priceElement": ".product-tile__price-wrapper"
+    "price": ".product-tile__price--original",
+    "discount": ".product-tile__price--discounted"
   },
   {
     "name": "Eurokos LT",
@@ -31,7 +32,8 @@
     "imgSource": "data-src",
     "nameElement": ".prd-title",
     "innerText": "innerText",
-    "priceElement": ".price-new"
+    "price": ".price-new",
+    "discount": ".price-new"
   },
   {
     "name": "Douglas LT",
@@ -48,7 +50,8 @@
     "imgSource": "src",
     "nameElement": ".name",
     "innerText": "innerText",
-    "priceElement": ".now"
+    "price": ".now",
+    "discount": ".now"
   },
   {
     "name": "Kristiana LT",
@@ -65,6 +68,7 @@
     "imgSource": "data-src",
     "nameElement": ".product-item-name",
     "innerText": "innerText",
-    "priceElement": ".price-container"
+    "price": ".price-wrapper",
+    "discount": ".price-wrapper"
   }
 ]

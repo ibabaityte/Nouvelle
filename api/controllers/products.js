@@ -29,6 +29,7 @@ const Scrape = async (req, res) => {
         var images = [[], [], [], []];
         var names = [[], [], [], []];
         var prices = [[], [], [], []];
+        var reducedPrices = [[], [], [], []];
 
         const cluster = await initCluster();
 
@@ -41,17 +42,17 @@ const Scrape = async (req, res) => {
             links,
             images,
             names,
-            prices
+            prices,
+            reducedPrices
         );
 
         for (let i = 0; i < links.length; i++) {
             for (let j = 0; j < links[i].length; j++) {
-                results.push(new Result(links[i][j], names[i][j], images[i][j], prices[i][j]));
+                results.push(new Result(links[i][j], names[i][j], images[i][j], prices[i][j], reducedPrices[i][j]));
             }
         }
 
         myCache.set(query + page, results, 300000);
-
     }
 
     res

@@ -1,13 +1,13 @@
 import sourceJson from "../utils/sources.json" assert {type: "json"};
 import {Cluster} from "puppeteer-cluster";
 
-const scrapeCluster = async (cluster, query, page, kristianaPage, offset, links, images, names, prices) => {
-    await cluster.task(async ({page, data: {i, shop, link, links, images, names, prices}}) => scrapePages(page, i, shop, link, links, images, names, prices));
+const scrapeCluster = async (cluster, query, page, kristianaPage, offset, links, images, names, prices, reducedPrices) => {
+    await cluster.task(async ({page, data: {i, shop, link, links, images, names, prices, reducedPrices}}) => scrapePages(page, i, shop, link, links, images, names, prices, reducedPrices));
 
-    for(let i = 0; i < sourceJson.length; i++){
+    for (let i = 0; i < sourceJson.length; i++) {
         let link = generateLink(i, query, kristianaPage, page, offset);
         let shop = sourceJson[i].name;
-        await cluster.queue({i, shop, link, links, images, names, prices});
+        await cluster.queue({i, shop, link, links, images, names, prices, reducedPrices});
     }
 
     await cluster.idle();
@@ -33,7 +33,7 @@ const initCluster = async () => {
 };
 
 const generateLink = (i, query, kristianaPage, page, offset) => {
-    if(sourceJson[i].countByPage) {
+    if (sourceJson[i].countByPage) {
         let newLink = sourceJson[i].searchUrl.replace('$argument$', query);
         return newLink.replace('$pageNumber$', sourceJson[i].name === "Kristiana LT" ? kristianaPage : page);
     } else {
@@ -42,7 +42,7 @@ const generateLink = (i, query, kristianaPage, page, offset) => {
     }
 }
 
-const scrapePages = async (page, i, shop, link, linksArray, imgsArray, namesArray, pricesArray) => {
+const scrapePages = async (page, i, shop, link, linksArray, imgsArray, namesArray, pricesArray, reducedPricesArray) => {
     await page.setUserAgent('UA-TEST');
     await page.setRequestInterception(true);
     page.on('request', (request) => {
@@ -55,9 +55,7 @@ const scrapePages = async (page, i, shop, link, linksArray, imgsArray, namesArra
 
     await page.goto(link, {waitUntil: "domcontentloaded"});
 
-    // if(shop === "Drogas LT" || shop === "Douglas LT") {
-        await page.waitForTimeout(3000);
-    // }
+    await page.waitForTimeout(3000);
 
     const resultBoxes = await page.$x(sourceJson[i].resultBoxes);
 
@@ -68,14 +66,14 @@ const scrapePages = async (page, i, shop, link, linksArray, imgsArray, namesArra
 
     // imgs
     let images;
-    if(sourceJson[i].isDataSrc) {
+    if (sourceJson[i].isDataSrc) {
         images = await page.$$eval(sourceJson[i].imgElement, el => el.map(x => x.getAttribute("data-src")));
     } else {
         images = await page.$$eval(sourceJson[i].imgElement, el => el.map(x => x.getAttribute("src")));
     }
 
-    for(let j = 0; j < images.length; j++) {
-        if(!sourceJson[i].wholeUrl){
+    for (let j = 0; j < images.length; j++) {
+        if (!sourceJson[i].wholeUrl) {
             imgsArray[i].push(sourceJson[i].url + images[j]);
         } else {
             imgsArray[i].push(images[j]);
@@ -88,10 +86,14 @@ const scrapePages = async (page, i, shop, link, linksArray, imgsArray, namesArra
     await Promise.all(nameJsHandles.map(async res => namesArray[i].push(await res.jsonValue())));
 
     // price
-    const priceHandles = await Promise.all(resultBoxes.map(res => res.$(sourceJson[i].priceElement)));
-    const priceJsHandles = await Promise.all(priceHandles.map(res => res.getProperty(sourceJson[i].innerText)));
-    await Promise.all(priceJsHandles.map(async res => pricesArray[i].push(await res.jsonValue())));
+    const priceHandles = await Promise.all(resultBoxes.map(res => res.$(sourceJson[i].price)));
+    const priceJsHandles = await Promise.all(priceHandles.map(res => res === null ? '0' : res.getProperty(sourceJson[i].innerText)));
+    await Promise.all(priceJsHandles.map(async res => pricesArray[i].push(res === '0' ? await res : (await res.jsonValue()).split('\/')[0].replace('nuo ', ''))));
 
+    // reduced price
+    const reducedPriceHandles = await Promise.all(resultBoxes.map(res => res.$(sourceJson[i].discount)));
+    const reducedPriceJsHandles = await Promise.all(reducedPriceHandles.map(res => res === null ? '0' : res.getProperty(sourceJson[i].innerText)));
+    await Promise.all(reducedPriceJsHandles.map(async res => reducedPricesArray[i].push(res === '0' ? await res : (await res.jsonValue()).split('\/')[0].replace('nuo ', ''))));
 }
 
 export {
