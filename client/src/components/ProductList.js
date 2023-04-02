@@ -1,16 +1,17 @@
 const ProductList = (props) => {
 
     const {
-        results
+        pages,
+        activePage
     } = props;
 
     return (
         <div>
             {
-                results.length === 0 ?
+                !!pages && pages.length === 0 ?
                     <div>Waiting...</div>
                     :
-                    results.map((result, key) => {
+                    pages[activePage].map((result, key) => {
                         return (
                             <div key={key}>
                                 <h2>{result.name}</h2>

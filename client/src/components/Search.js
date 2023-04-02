@@ -1,27 +1,15 @@
-// utils imports
-import {fetchProducts} from "../utils/searchUtils";
-
 const Search = (props) => {
-
     const {
-        prevQuery,
-        setPrevQuery,
-        query,
         setQuery,
-        results,
-        setResults,
-        currentPage,
-        setCurrentPage,
-        kristianaCurrentPage,
-        setKristianaCurrentPage,
-        productOffset,
-        setProductOffset
+        getProductList,
     } = props;
 
     return (
         <div>
             <input type="text" onChange={(e) => setQuery(e.target.value)}/>
-            <button onClick={() => fetchProducts(results, setResults, query, prevQuery, setPrevQuery, currentPage, setCurrentPage, kristianaCurrentPage, setKristianaCurrentPage, productOffset, setProductOffset)}>Search</button>
+            <button
+                onClick={async () => await getProductList()}>Search
+            </button>
         </div>
     );
 }
