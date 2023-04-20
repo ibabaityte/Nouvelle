@@ -21,8 +21,10 @@ const sortByRelevance = (array, query) => {
     let queryStringArray = query.split(" ");
     return array.map(entry => {
         let points = 0;
-        if (queryStringArray.some(substring => entry.name.toLowerCase().includes(substring))) {
-            points += 1;
+        if(entry.name) {
+            if (queryStringArray.some(substring => entry.name.toLowerCase().includes(substring))) {
+                points += 1;
+            }
         }
         return {...entry, points};
     }).sort((a, b) => b.points - a.points);

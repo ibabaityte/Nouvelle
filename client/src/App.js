@@ -1,11 +1,15 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+// style imports
+import './App.css';
+import {mainDiv} from "./styles/MainPageStyles";
+
 // component imports
 import Search from "./components/Search";
 import ProductList from "./components/ProductList";
-import SortPanel from "./components/SortPanel";
 import Pagination from "./components/Pagination";
-import ResultCounter from "./components/ResultCounter";
-import PageSizePanel from "./components/PageSizePanel";
+import ResultParamPanel from "./components/ResultParamPanel";
+import Header from "./components/Header";
 import {
     fetchProducts,
     sortAlphabeticallyAsc, sortAlphabeticallyDesc,
@@ -16,6 +20,7 @@ import {
 
 const App = () => {
     const [results, setResults] = useState([]);
+    const [searchStatus, setSearchStatus] = useState("idle");
     const [pages, setPages] = useState([]);
     const [activePage, setActivePage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -25,6 +30,12 @@ const App = () => {
     const [sortParam, setSortParam] = useState("relevance");
     const [prevQuery, setPrevQuery] = useState("");
     const [query, setQuery] = useState("");
+    const [windowSize, setWindowSize] = useState(window.innerWidth);
+
+    useEffect(() => {
+        window.addEventListener("resize", () => {setWindowSize(window.innerWidth)});
+        window.removeEventListener("resize", () => {setWindowSize(window.innerWidth)});
+    }, [window.innerWidth])
 
     const sortAfterSearch = (array) => {
         const sort = sortParam;
@@ -51,10 +62,13 @@ const App = () => {
         return sorted;
     };
 
-    const getProductList = async () => {
+    const getProductList = async (e) => {
+        e.preventDefault();
         let page = currentPage;
         let kristianaPage = kristianaCurrentPage;
         let offset = productOffset;
+
+        setSearchStatus("loading");
         if (query !== prevQuery) {
             page = 0;
             kristianaPage = 1;
@@ -71,6 +85,7 @@ const App = () => {
         const products = await fetchProducts(query, page, kristianaPage, offset);
         const resultArray = sortAfterSearch(query === prevQuery ? [...results, ...products] : products, query);
 
+        setSearchStatus("loaded");
         setResults(resultArray);
         getProductPages(resultArray, pageSize);
 
@@ -93,12 +108,17 @@ const App = () => {
     };
 
     return (
-        <div className="App">
+        <div id="main-div" className="App" style={mainDiv}>
+            <Header/>
             <Search
+                query={query}
                 setQuery={setQuery}
                 getProductList={getProductList}
+                pageSize={pageSize}
+                results={results}
+                windowSize={windowSize}
             />
-            <SortPanel
+            <ResultParamPanel
                 results={results}
                 setResults={setResults}
                 sortParam={sortParam}
@@ -106,19 +126,14 @@ const App = () => {
                 query={query}
                 setActivePage={setActivePage}
                 getProductPages={getProductPages}
-                pageSize={pageSize}
-            />
-            <PageSizePanel
+                windowSize={windowSize}
                 changePageSize={changePageSize}
                 pageSize={pageSize}
-            />
-            <ResultCounter
-                pages={pages}
-                results={results}
             />
             <ProductList
                 pages={pages}
                 activePage={activePage}
+                searchStatus={searchStatus}
             />
             <Pagination
                 pages={pages}

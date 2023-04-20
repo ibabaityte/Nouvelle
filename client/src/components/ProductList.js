@@ -1,29 +1,43 @@
+import Product from "./Product";
+import Spinner from "./Spinner";
+import {
+    productList
+} from "../styles/Product";
+import Grid from '@mui/material/Grid';
+import EmptyProductList from "./EmptyProductList";
+
 const ProductList = (props) => {
 
     const {
         pages,
-        activePage
+        activePage,
+        searchStatus
     } = props;
 
     return (
-        <div>
+        <Grid container sx={productList}>
             {
-                !!pages && pages.length === 0 ?
-                    <div>Waiting...</div>
-                    :
-                    pages[activePage].map((result, key) => {
-                        return (
-                            <div key={key}>
-                                <h2>{result.name}</h2>
-                                <a href={result.url} target="_blank" rel="noreferrer" >{result.url}</a>
-                                <img src={result.img} alt={"product image"}/>
-                                <h3>{result.img}</h3>
-                                <h3>{result.price}</h3>
-                            </div>
-                        );
-                    })
+                searchStatus === "loading" && <Spinner/>
             }
-        </div>
+            {
+                searchStatus === "loaded" &&
+                pages[activePage].map((result, key) => {
+                    return (
+                        <Grid item key={key} xl={4} lg={5} md={6} xs={12} sx={productList}>
+                            <Product
+                                name={result.name}
+                                url={result.url}
+                                img={result.img}
+                                price={result.price}
+                            />
+                        </Grid>
+                    );
+                })
+            }
+            {
+                searchStatus === "idle" && <EmptyProductList/>
+            }
+        </Grid>
     );
 }
 
