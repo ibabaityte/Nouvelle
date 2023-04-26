@@ -12,6 +12,20 @@ const searchElement = {
     gridArea: "1 / 1"
 }
 
+const errorElement = {
+    height: "20vh",
+    minHeight: "200px",
+    width: "90%",
+    margin: "0 auto",
+    marginTop: "20px",
+    borderRadius: "20px",
+    background: "rgb(213,194,77)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gridArea: "1 / 1"
+}
+
 const searchWrapper = {
     backgroundColor: "white",
     gridArea: "1 / 1",
@@ -65,6 +79,7 @@ const searchButton = {
 
 export {
     searchElement,
+    errorElement,
     searchWrapper,
     searchInput,
     searchButton,

@@ -20,7 +20,7 @@ const ProductList = (props) => {
                 searchStatus === "loading" && <Spinner/>
             }
             {
-                searchStatus === "loaded" &&
+                searchStatus === "loaded" && pages.length > 0 &&
                 pages[activePage].map((result, key) => {
                     return (
                         <Grid item key={key} xl={4} lg={5} md={6} xs={12} sx={productList}>

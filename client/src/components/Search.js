@@ -4,34 +4,40 @@ import SearchIcon from '@mui/icons-material/Search';
 import ResultCounter from "./ResultCounter";
 import Button from '@mui/material/Button';
 import {
-    searchElement,
     searchWrapper,
     searchInput,
     searchForm,
     searchButton
 } from "../styles/SearchStyles";
+import ErrorIndicator from "./ErrorIndicator";
 
 const Search = (props) => {
     const {
         query,
         setQuery,
         getProductList,
-        pageSize,
+        pages,
         results,
-        windowSize
+        windowSize,
+        errorMessage,
+        setErrorMessage
     } = props;
 
     return (
         <div style={{"display": "grid", "marginTop": "20px"}}>
-            <div style={searchElement}>
-                <ResultCounter
-                    pageSize={pageSize}
-                    results={results}
-
-                />
-            </div>
+            {
+                errorMessage === "" ?
+                    <ResultCounter
+                        pages={pages}
+                        results={results}
+                    />
+                    :
+                    <ErrorIndicator
+                        errorMessage={errorMessage}
+                    />
+            }
             <div style={searchWrapper}>
-                <form onSubmit={(e) => getProductList(e)} style={searchForm}>
+                <form onSubmit={(e) => getProductList(e, setErrorMessage)} style={searchForm}>
                     <TextField
                         sx={searchInput}
                         label="Įveskite prekės pavadinimą"

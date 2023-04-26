@@ -22,3 +22,32 @@ body {
         width: 90vw !important;
     }
 }
+
+#pagination ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    justify-content: center;
+    border: 2px solid rgb(224,182,234);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#pagination li {
+    border: 1px solid rgb(224,182,234);
+    display: flex;
+    justify-content: center;
+    color: rgb(197,109,214);
+    font-family: "Helvetica" ,sans-serif;
+    font-weight: 700;
+}
+
+#pagination li a {
+    padding: 8px 10px;
+}
+
+#pagination li.selected {
+    background-color: rgb(224,182,234);
+    color: rgb(255,255,255);
+}
+

@@ -1,17 +1,18 @@
 import React from "react";
 import {resultCounter} from "../styles/ResultCounterStyles";
+import {searchElement} from "../styles/SearchStyles";
 
 const ResultCounter = (props) => {
     const {
-        pageSize,
+        pages,
         results
     } = props;
 
     return(
-        <div>
+        <div style={searchElement}>
             {
                 results.length > 0 ?
-                    <h3 style={resultCounter}>Rasta {results.length} produktų {pageSize} puslapiuose</h3>
+                    <h3 style={resultCounter}>Rasta {results.length} produktų {pages.length} puslapiuose</h3>
                     :
                     <h3 style={resultCounter}>Pradėk paiešką</h3>
             }

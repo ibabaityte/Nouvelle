@@ -25,7 +25,7 @@ const SortButtons = (props) => {
                     disabled={sortParam === "priceAsc"}
                 >
                     Kainą
-                    <ArrowDownwardIcon
+                    <ArrowUpwardIcon
                         onClick={() => applySort({target: {value: "priceAsc"}})}
                     />
                 </Button>
@@ -35,7 +35,7 @@ const SortButtons = (props) => {
                     value="priceDesc"
                     disabled={sortParam === "priceDesc"}
                 >Kainą
-                    <ArrowUpwardIcon
+                    <ArrowDownwardIcon
                         onClick={() => applySort({target: {value: "priceDesc"}})}
                     />
                 </Button>

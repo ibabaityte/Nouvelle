@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const fetchProducts = async (query, currentPage, kristianaCurrentPage, productOffset) => {
-    let emptyArray = [];
+const fetchProducts = async (query, currentPage, kristianaCurrentPage, productOffset, setErrorMessage, setSearchStatus) => {
+    let resultArray = [];
     await axios.get("http://localhost:8080/scrape", {
         'params': {
             'query': query,
@@ -10,11 +10,14 @@ const fetchProducts = async (query, currentPage, kristianaCurrentPage, productOf
             'productOffset': productOffset
         }
     }).then(result => {
-        emptyArray = result.data;
+        resultArray = result.data;
+        resultArray.length > 0 ? setSearchStatus("loaded") : setSearchStatus("idle");
     }).catch(e => {
-        alert(e.response.data.message);
+        // console.log(e.response.data.message);
+        setSearchStatus("idle");
+        setErrorMessage(e.response.data.message);
     });
-    return emptyArray;
+    return resultArray;
 }
 
 const sortByRelevance = (array, query) => {

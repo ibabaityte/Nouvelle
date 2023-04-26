@@ -30,12 +30,20 @@ const App = () => {
     const [sortParam, setSortParam] = useState("relevance");
     const [prevQuery, setPrevQuery] = useState("");
     const [query, setQuery] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const [windowSize, setWindowSize] = useState(window.innerWidth);
 
     useEffect(() => {
         window.addEventListener("resize", () => {setWindowSize(window.innerWidth)});
         window.removeEventListener("resize", () => {setWindowSize(window.innerWidth)});
-    }, [window.innerWidth])
+    }, [window.innerWidth]);
+
+    useEffect(() => {
+        let timer = setTimeout(() => setErrorMessage(""), 5000);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [errorMessage]);
 
     const sortAfterSearch = (array) => {
         const sort = sortParam;
@@ -62,7 +70,7 @@ const App = () => {
         return sorted;
     };
 
-    const getProductList = async (e) => {
+    const getProductList = async (e, setErrorMessage) => {
         e.preventDefault();
         let page = currentPage;
         let kristianaPage = kristianaCurrentPage;
@@ -82,10 +90,9 @@ const App = () => {
         setCurrentPage(page);
         setProductOffset(offset);
 
-        const products = await fetchProducts(query, page, kristianaPage, offset);
+        const products = await fetchProducts(query, page, kristianaPage, offset, setErrorMessage, setSearchStatus);
         const resultArray = sortAfterSearch(query === prevQuery ? [...results, ...products] : products, query);
 
-        setSearchStatus("loaded");
         setResults(resultArray);
         getProductPages(resultArray, pageSize);
 
@@ -114,9 +121,11 @@ const App = () => {
                 query={query}
                 setQuery={setQuery}
                 getProductList={getProductList}
-                pageSize={pageSize}
+                pages={pages}
                 results={results}
                 windowSize={windowSize}
+                errorMessage={errorMessage}
+                setErrorMessage={setErrorMessage}
             />
             <ResultParamPanel
                 results={results}

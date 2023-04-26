@@ -14,9 +14,15 @@ const Scrape = async (req, res) => {
     // generated results
     var results = [];
 
+    if(req.query.query === undefined || req.query.query.length < 1) {
+        return res.status(404).send({
+            message: "Įveskite paieškos žodžius ir bandykite dar kartą."
+        });
+    }
+
     if(!validateRequest(req)) {
         return res.status(404).send({
-            message: "Something went wrong. Try again."
+            message: "Įvyko klaida. Bandykite dar kartą"
         });
     }
 
@@ -58,7 +64,7 @@ const Scrape = async (req, res) => {
     res
         .status(validateResults(results) ? 200 : 404)
         .send(validateResults(results) ? results : {
-            message: "No products found. Try again. "
+            message: "Nerasta jokių produktų. Bandykite dar kartą."
         })
 }
 

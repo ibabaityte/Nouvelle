@@ -4,7 +4,6 @@ import 'react-spinner-animated/dist/index.css'
 const Spinner = () => {
     return (
         <HalfMalf
-            // text={"Loading..."}
                    bgColor={"white"}
                    center={false}
                    width={"150px"}
