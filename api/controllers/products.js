@@ -63,9 +63,12 @@ const Scrape = async (req, res) => {
 
     res
         .status(validateResults(results) ? 200 : 404)
-        .send(validateResults(results) ? results : {
-            message: "Nerasta jokių produktų. Bandykite dar kartą."
-        })
+        .send(validateResults(results) ?
+            results :
+            {
+                message: "Nerasta jokių produktų. Bandykite dar kartą."
+            }
+        )
 }
 
 export default {

@@ -92,6 +92,7 @@ const App = () => {
 
         const products = await fetchProducts(query, page, kristianaPage, offset, setErrorMessage, setSearchStatus);
         const resultArray = sortAfterSearch(query === prevQuery ? [...results, ...products] : products, query);
+        resultArray.length > 0 ? setSearchStatus("loaded") : setSearchStatus("idle");
 
         setResults(resultArray);
         getProductPages(resultArray, pageSize);
@@ -104,6 +105,11 @@ const App = () => {
         for(let x = 0; x < array.length; x += pageSize) {
             const page = array.slice(x, x + pageSize);
             resultPages.push(page);
+        }
+        if(activePage > 0 && activePage >= resultPages.length) {
+            let page = resultPages.length - 1;
+            setActivePage(page);
+            document.querySelectorAll("#pagination li")[resultPages.length].classList.add("selected");
         }
         setPages(resultPages);
     }

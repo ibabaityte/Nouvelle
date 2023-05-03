@@ -14,13 +14,13 @@ const PaginationPanel = (props) => {
             {
                 pages.length > 0 ?
                     <ReactPaginate
-                    breakLabel="..."
-                    nextLabel=">"
-                    previousLabel="<"
-                    onPageChange={(e) => setActivePage(e.selected)}
-                    pageRangeDisplayed={2}
-                    pageCount={pages.length}
-                />
+                        breakLabel="..."
+                        nextLabel=">"
+                        previousLabel="<"
+                        onPageChange={(e) => setActivePage(e.selected)}
+                        pageRangeDisplayed={2}
+                        pageCount={pages.length}
+                    />
                     : null
             }
         </div>

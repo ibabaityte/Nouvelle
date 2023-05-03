@@ -17,8 +17,8 @@ const SortSelect = (props) => {
             onChange={(e) => applySort(e)}
         >
             <MenuItem value="relevance" sx={selectOption}>Aktualumą</MenuItem>
-            <MenuItem value="priceAsc" sx={selectOption}>Kainą mažėjančiai</MenuItem>
-            <MenuItem value="priceDesc" sx={selectOption}>Kainą didėjančiai</MenuItem>
+            <MenuItem value="priceAsc" sx={selectOption}>Kainą didėjančiai</MenuItem>
+            <MenuItem value="priceDesc" sx={selectOption}>Kainą mažėjančiai</MenuItem>
             <MenuItem value="az" sx={selectOption}>Abėcėlę A-Z</MenuItem>
             <MenuItem value="za" sx={selectOption}>Abėcėlę Z-A</MenuItem>
         </TextField>

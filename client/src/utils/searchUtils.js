@@ -11,9 +11,8 @@ const fetchProducts = async (query, currentPage, kristianaCurrentPage, productOf
         }
     }).then(result => {
         resultArray = result.data;
-        resultArray.length > 0 ? setSearchStatus("loaded") : setSearchStatus("idle");
+        setSearchStatus("loaded");
     }).catch(e => {
-        // console.log(e.response.data.message);
         setSearchStatus("idle");
         setErrorMessage(e.response.data.message);
     });
