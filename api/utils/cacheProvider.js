@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
 
 const myCache = new NodeCache({
-    stdTTL: 300000
+    stdTTL: 500000
 });
 
 export {myCache};

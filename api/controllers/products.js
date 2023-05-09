@@ -58,7 +58,7 @@ const Scrape = async (req, res) => {
             }
         }
 
-        myCache.set(query + page, results, 300000);
+        myCache.set(query + page, results, 500000);
     }
 
     res
