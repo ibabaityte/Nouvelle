@@ -10,9 +10,9 @@ While using this app users can:
 * Select how many products are shown in one screen
 
 ## Screenshots
-![img1.jpg](readme pictures/img1.jpg)
-![img2.jpg](readme pictures/img2.jpg)
-![img3.jpg](readme pictures/img3.jpg)
+![img1.jpg](/readme%20pictures/img1.jpg)
+![img2.jpg](/readme%20pictures/img2.jpg)
+![img3.jpg](/readme%20pictures/img3.jpg)
 
 ## Technologies
 Project is created with:
